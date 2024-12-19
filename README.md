@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# To-Do List Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple To-Do List application built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Features
+- **To-Do Input Form**: Add new tasks with a description and due date.
+- **Task List**: Display tasks with options to:
+  - Mark tasks as completed.
+  - Delete tasks.
+- **Task Filtering**: Filter tasks by:
+  - All tasks
+  - Active tasks (not completed)
+  - Completed tasks
+- **State Management**: Uses React `useState` and `useContext` for managing state.
+- **Styling**: Built with [TailwindCSS](https://tailwindcss.com/) for layout and styles.
+- **Persistence**: Tasks are saved in `localStorage` to persist data across sessions.
+- **Sorting**: Tasks are sorted by their due date.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup
 
-## Expanding the ESLint configuration
+1. Clone the repository:
+   ```bash
+   git clone <repo-url>
+   cd <repo-directory>
+2. Run the development server:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+bash
+Copy code
+npm run dev
 
-- Configure the top-level `parserOptions` property like this:
+Technologies Used
+React: Front-end JavaScript library for building user interfaces.
+TypeScript: Adds static types to JavaScript for better code quality.
+Vite: A fast build tool for modern web development.
+TailwindCSS: A utility-first CSS framework for designing UIs.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+# Next Steps I would do
+Refactor and separate interfaces and types into dedicated files.
+Enhance functionality with features like task prioritization or reminders.

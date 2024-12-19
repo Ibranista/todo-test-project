@@ -1,39 +1,75 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
-import './App.css';
-import { selectCurrentUser } from './selectors/user.selectors';
-import { setUser } from './features/userSlice';
+import { useState, useEffect } from 'react';
+import TaskInput from './components/TaskInput.tsx';
+import TaskList from './components/TaskList.tsx';
+import FilterButtons from './components/FilterButtons.tsx';
+
+interface Task {
+  id: number;
+  description: string;
+  completed: boolean;
+  dueDate: string | null;
+}
 
 function App() {
-  const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
 
-  const [userName, setUserName] = useState('');
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
-  const handleAddUser = () => {
-    if (userName.trim()) {
-      dispatch(setUser({ name: userName })); // Set the user with the name
-      setUserName(''); // Clear the input field
-    }
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === 'all') return true;
+    if (filter === 'active') return !task.completed;
+    if (filter === 'completed') return task.completed;
+    return true;
+  });
+
+  const addTask = (description: string, dueDate: string | null) => {
+    const newTask: Task = {
+      id: Date.now(),
+      description,
+      completed: false,
+      dueDate: dueDate || null,
+    };
+    setTasks((prev) => [...prev, newTask]);
   };
 
-  return (
-    <div className="App">
-      <h1>Current User</h1>
-      {currentUser ? (
-        <p>User Name: {currentUser.name}</p>
-      ) : (
-        <p>No user added yet</p>
-      )}
+  const toggleCompletion = (id: number) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
 
-      <div>
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter user name"
+  const deleteTask = (id: number) => {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
+
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
+    if (!a.dueDate && !b.dueDate) return 0;
+    if (!a.dueDate) return 1;
+    if (!b.dueDate) return -1;
+
+    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-10">
+      <div className="max-w-md mx-auto bg-white rounded shadow p-6">
+        <h1 className="text-2xl font-bold mb-4">My To-Do List</h1>
+        <TaskInput onAddTask={addTask} />
+        <FilterButtons filter={filter} setFilter={setFilter} />
+        <TaskList
+          tasks={sortedTasks}
+          onToggleCompletion={toggleCompletion}
+          onDeleteTask={deleteTask}
         />
-        <button onClick={handleAddUser}>Add User</button>
       </div>
     </div>
   );
