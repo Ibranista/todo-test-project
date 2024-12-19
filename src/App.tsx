@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
-import TaskInput from './components/TaskInput';
-import TaskList from './components/TaskList';
-import FilterButtons from './components/FilterButtons';
+import TaskInput from './components/TaskInput.tsx';
+import TaskList from './components/TaskList.tsx';
+import FilterButtons from './components/FilterButtons.tsx';
+
+interface Task {
+  id: number;
+  description: string;
+  completed: boolean;
+  dueDate: string | null;
+}
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -22,8 +29,8 @@ function App() {
     return true;
   });
 
-  const addTask = (description, dueDate) => {
-    const newTask = {
+  const addTask = (description: string, dueDate: string | null) => {
+    const newTask: Task = {
       id: Date.now(),
       description,
       completed: false,
@@ -32,7 +39,7 @@ function App() {
     setTasks((prev) => [...prev, newTask]);
   };
 
-  const toggleCompletion = (id) => {
+  const toggleCompletion = (id: number) => {
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
@@ -40,7 +47,7 @@ function App() {
     );
   };
 
-  const deleteTask = (id) => {
+  const deleteTask = (id: number) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
@@ -48,7 +55,8 @@ function App() {
     if (!a.dueDate && !b.dueDate) return 0;
     if (!a.dueDate) return 1;
     if (!b.dueDate) return -1;
-    return new Date(a.dueDate) - new Date(b.dueDate);
+
+    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
   });
 
   return (

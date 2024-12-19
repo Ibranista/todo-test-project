@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
-function TaskInput({ onAddTask }) {
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
+interface TaskInputProps {
+  onAddTask: (description: string, dueDate: string) => void;
+}
 
-  const handleSubmit = (e) => {
+function TaskInput({ onAddTask }: TaskInputProps) {
+  const [description, setDescription] = useState<string>('');
+  const [dueDate, setDueDate] = useState<string>('');
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!description.trim()) return;
     onAddTask(description, dueDate);
@@ -19,13 +23,13 @@ function TaskInput({ onAddTask }) {
         placeholder="Enter new task"
         className="border border-gray-300 p-2 rounded"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
       />
       <input
         type="date"
         className="border border-gray-300 p-2 rounded"
         value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setDueDate(e.target.value)}
       />
       <button
         type="submit"
