@@ -11,7 +11,7 @@ This is a simple To-Do List application built with React, TypeScript, and Vite.
   - All tasks
   - Active tasks (not completed)
   - Completed tasks
-- **State Management**: Uses React `useState` and `useContext` for managing state.
+- **State Management**: Uses `hooks` for managing state.
 - **Styling**: Built with [TailwindCSS](https://tailwindcss.com/) for layout and styles.
 - **Persistence**: Tasks are saved in `localStorage` to persist data across sessions.
 - **Sorting**: Tasks are sorted by their due date.
